@@ -9,7 +9,31 @@ require "vendor/autoload.php";
 
 $qrcode = new QrReader($_FILES['qrimage']['tmp_name']);
 $text = $qrcode->text();
+$ejemplo = explode(",",$text);
+$i = 0;
 
+$conexion=mysqli_connect("localhost","root","","trabajoFinal");
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "trabajoFinal";
+
+// Create connection
+$conn = new mysqli($servername, $username,$password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "INSERT INTO lectura (empleado,fecha,hora,id_producto,fabricante,producto,lote,vto)
+VALUES ('$ejemplo[0]','$ejemplo[1]','$ejemplo[2]','$ejemplo[3]','$ejemplo[4]','$ejemplo[5]','$ejemplo[6]','$ejemplo[7]')";
+if ($conn->query($sql) === TRUE) {
+echo "datos insertados en la base de datos correctamente";
+} else {
+echo "Error: " . $sql . "<br>" . $conn->error;
+}
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,9 +68,9 @@ $text = $qrcode->text();
                 </div>
                 <hr>
                 <p><strong>Data in QR-code:</strong></p>
-                <p><?php echo $text ?></p>
+                <p><?php echo $ejemplo[0] ?></p>
                 <hr>
-                <a href="index.php">Decode Another</a>
+                <a href="indexx.php">Decode Another</a>
             </div>
         </div>
     </div>
